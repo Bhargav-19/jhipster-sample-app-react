@@ -1,5 +1,6 @@
+import { describe, expect, it, vi } from 'vitest';
+
 import axios from 'axios';
-import sinon from 'sinon';
 
 import administration, {
   getConfigurations,
@@ -165,12 +166,12 @@ describe('Administration reducer tests', () => {
   });
   describe('Actions', () => {
     const resolvedObject = { value: 'whatever' };
-    const getState = jest.fn();
-    const dispatch = jest.fn();
+    const getState = vi.fn();
+    const dispatch = vi.fn();
     const extra = {};
     beforeEach(() => {
-      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.get = vi.fn().mockResolvedValue(resolvedObject);
+      axios.post = vi.fn().mockResolvedValue(resolvedObject);
     });
     it('dispatches FETCH_HEALTH_PENDING and FETCH_HEALTH_FULFILLED actions', async () => {
       const result = await getSystemHealth()(dispatch, getState, extra);

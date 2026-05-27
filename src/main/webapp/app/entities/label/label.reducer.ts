@@ -104,8 +104,7 @@ export const LabelSlice = createEntitySlice({
             if (!action.meta?.arg?.sort) {
               return 1;
             }
-            const order = action.meta.arg.sort.split(',')[1];
-            const predicate = action.meta.arg.sort.split(',')[0];
+            const [predicate, order] = action.meta.arg.sort.split(',');
             return order === ASC ? (a[predicate] < b[predicate] ? -1 : 1) : b[predicate] < a[predicate] ? -1 : 1;
           }),
         };

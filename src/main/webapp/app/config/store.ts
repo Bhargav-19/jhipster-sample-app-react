@@ -1,10 +1,10 @@
 import { ThunkAction, UnknownAction, configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { loadingBarMiddleware } from 'react-redux-loading-bar';
 
 import sharedReducers from 'app/shared/reducers';
 
 import errorMiddleware from './error-middleware';
+import loadingBarMiddleware from './loading-bar-middleware';
 import loggerMiddleware from './logger-middleware';
 import notificationMiddleware from './notification-middleware';
 
@@ -16,7 +16,7 @@ const store = configureStore({
         // Ignore these field paths in all actions
         ignoredActionPaths: ['meta.arg', 'meta.baseQueryMeta', 'payload.config', 'payload.request', 'payload.headers', 'error'],
       },
-    }).concat(errorMiddleware, notificationMiddleware, loadingBarMiddleware(), loggerMiddleware),
+    }).concat(errorMiddleware, notificationMiddleware, loadingBarMiddleware, loggerMiddleware),
 });
 
 const getStore = () => store;

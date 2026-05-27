@@ -88,7 +88,7 @@ export const UserManagement = () => {
   const loading = useAppSelector(state => state.userManagement.loading);
   const getSortIconByFieldName = (fieldName: string) => {
     const sortFieldName = pagination.sort;
-    const order = pagination.order;
+    const { order } = pagination;
     if (sortFieldName !== fieldName) {
       return faSort;
     }

@@ -1,3 +1,4 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 import { TranslatorContext } from 'react-jhipster';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -35,7 +36,7 @@ describe('private-route component', () => {
   // All tests will go here
   it('Should throw error when falsy children are provided', () => {
     const originalError = console.error;
-    console.error = jest.fn();
+    console.error = vi.fn();
     expect(() =>
       wrapper(<PrivateRoute>{null}</PrivateRoute>, {
         isAuthenticated: true,

@@ -1,8 +1,8 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
 
 import { configureStore } from '@reduxjs/toolkit';
-import * as toastify from 'react-toastify'; // synthetic default import doesn't work here due to mocking.
-import sinon from 'sinon';
+import { toast } from 'react-toastify';
 
 import {
   INVALID_PASSWORD_TYPE,
@@ -13,6 +13,13 @@ import {
 import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 
 import notificationMiddleware from './notification-middleware';
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
 
 describe('Notification Middleware', () => {
   let store: ReturnType<typeof makeStore>;
@@ -36,7 +43,7 @@ describe('Notification Middleware', () => {
 
   const DEFAULT_ERROR = {
     type: ERROR_TYPE,
-    error: new Error('foo'),
+    error: { message: 'foo' },
   };
   const VALIDATION_ERROR = {
     type: ERROR_TYPE,
@@ -170,81 +177,79 @@ describe('Notification Middleware', () => {
 
   beforeEach(() => {
     store = makeStore();
-    sinon.spy(toastify.toast, 'error');
-    sinon.spy(toastify.toast, 'success');
+    vi.clearAllMocks();
     // ignore console errors
-    jest.spyOn(globalThis.console, 'error').mockImplementation();
+    vi.spyOn(globalThis.console, 'error').mockImplementation();
   });
 
   afterEach(() => {
-    (toastify.toast as any).error.restore();
-    (toastify.toast as any).success.restore();
+    vi.restoreAllMocks();
   });
 
   it('should not trigger a toast message but should return action', () => {
     expect(store.dispatch(DEFAULT).payload).toEqual('foo');
-    expect((toastify.toast as any).error.called).toEqual(false);
-    expect((toastify.toast as any).success.called).toEqual(false);
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   it('should trigger a success toast message for header alerts', () => {
     expect(store.dispatch(HEADER_SUCCESS).payload.status).toEqual(201);
-    sinon.assert.calledWithMatch((toastify.toast as any).success, 'foo.created');
+    expect(toast.success).toHaveBeenCalledWith(expect.stringContaining('foo.created'));
   });
 
   it('should trigger an error toast message and return error', () => {
     expect(store.dispatch(DEFAULT_ERROR).error.message).toEqual('foo');
-    sinon.assert.calledWithMatch((toastify.toast as any).error, 'foo');
+    expect(toast.error).toHaveBeenCalledWith('foo');
   });
 
   it('should trigger an error toast message and return error for generic message', () => {
     expect(store.dispatch(GENERIC_ERROR).error.response.data.message).toEqual('Error');
-    sinon.assert.calledWithMatch((toastify.toast as any).error, 'Error');
+    expect(toast.error).toHaveBeenCalledWith('Error');
   });
 
   it('should trigger an error toast message and return error for 400 response code', () => {
     expect(store.dispatch(VALIDATION_ERROR).error.response.data.message).toEqual('error.validation');
-    sinon.assert.calledWithMatch((toastify.toast as any).error, 'error.Size');
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining('error.Size'));
   });
 
   it('should trigger an error toast message and return error for 404 response code', () => {
     expect(store.dispatch(NOT_FOUND_ERROR).error.response.data.message).toEqual('Not found');
-    sinon.assert.calledWithMatch((toastify.toast as any).error, 'error.url.not.found');
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining('error.url.not.found'));
   });
 
   it('should trigger an error toast message and return error for 0 response code', () => {
     expect(store.dispatch(NO_SERVER_ERROR).error.response.status).toEqual(0);
-    sinon.assert.calledWithMatch((toastify.toast as any).error, 'error.server.not.reachable');
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining('error.server.not.reachable'));
   });
 
   it('should trigger an error toast message and return error for headers containing errors', () => {
     expect(store.dispatch(HEADER_ERRORS).error.response.status).toEqual(400);
-    sinon.assert.calledWithMatch((toastify.toast as any).error, 'foo.creation');
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining('foo.creation'));
   });
 
   it('should not trigger an error toast message and return error for 401 response code', () => {
     expect(store.dispatch(LOGIN_REJECTED_ERROR).error.response.status).toEqual(401);
-    expect((toastify.toast as any).error.called).toEqual(false);
-    expect((toastify.toast as any).success.called).toEqual(false);
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   it('should trigger an error toast message and return error for 400 response code', () => {
     expect(store.dispatch(TITLE_ERROR).error.response.status).toEqual(400);
-    sinon.assert.calledWithMatch((toastify.toast as any).error, 'Incorrect password');
+    expect(toast.error).toHaveBeenCalledWith('Incorrect password');
   });
 
   it('should trigger an error toast message and return error for string in data', () => {
     expect(store.dispatch(STRING_DATA_ERROR).error.response.status).toEqual(400);
-    sinon.assert.calledWithMatch((toastify.toast as any).error, 'Incorrect password string');
+    expect(toast.error).toHaveBeenCalledWith('Incorrect password string');
   });
 
   it('should trigger an error toast message and return error for unknown 400 error', () => {
     expect(store.dispatch(UNKNOWN_400_ERROR).error.response.status).toEqual(400);
-    sinon.assert.calledWithMatch((toastify.toast as any).error, 'Unknown error!');
+    expect(toast.error).toHaveBeenCalledWith('Unknown error!');
   });
 
   it('should trigger an error toast message and return error for unknown error', () => {
     expect(store.dispatch(UNKNOWN_ERROR).error.isAxiosError).toEqual(true);
-    sinon.assert.calledWithMatch((toastify.toast as any).error, 'Unknown error!');
+    expect(toast.error).toHaveBeenCalledWith('Unknown error!');
   });
 });

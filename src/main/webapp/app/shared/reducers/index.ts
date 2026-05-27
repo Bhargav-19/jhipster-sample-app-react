@@ -1,5 +1,4 @@
 import { ReducersMapObject } from '@reduxjs/toolkit';
-import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 
 import entitiesReducers from 'app/entities/reducers';
 import activate from 'app/modules/account/activate/activate.reducer';
@@ -8,11 +7,13 @@ import passwordReset from 'app/modules/account/password-reset/password-reset.red
 import register from 'app/modules/account/register/register.reducer';
 import settings from 'app/modules/account/settings/settings.reducer';
 import administration from 'app/modules/administration/administration.reducer';
-
 import userManagement from 'app/modules/administration/user-management/user-management.reducer';
+import loadingBar from 'app/shared/reducers/loading-bar';
+
 import applicationProfile from './application-profile';
 import authentication from './authentication';
 import locale from './locale';
+
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 const rootReducer: ReducersMapObject = {

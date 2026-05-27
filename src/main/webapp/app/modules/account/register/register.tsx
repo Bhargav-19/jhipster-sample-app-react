@@ -23,7 +23,7 @@ export const RegisterPage = () => {
 
   const currentLocale = useAppSelector(state => state.locale.currentLocale);
 
-  const handleValidSubmit = ({ username, email, firstPassword }) => {
+  const handleValidSubmit = ({ username, email, firstPassword }: Record<string, any>) => {
     dispatch(handleRegister({ login: username, email, password: firstPassword, langKey: currentLocale }));
   };
 

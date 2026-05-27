@@ -17,7 +17,7 @@ export const OperationDeleteDialog = () => {
   const [loadModal, setLoadModal] = useState(false);
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getEntity(id!));
     setLoadModal(true);
   }, []);
 

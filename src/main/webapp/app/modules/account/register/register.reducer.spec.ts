@@ -1,8 +1,8 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
 
 import { configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
-import sinon from 'sinon';
 
 import register, { handleRegister, reset } from './register.reducer';
 
@@ -71,14 +71,14 @@ describe('Creating account tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
-    const getState = jest.fn();
-    const dispatch = jest.fn();
+    const getState = vi.fn();
+    const dispatch = vi.fn();
     const extra = {};
     beforeEach(() => {
       store = configureStore({
         reducer: (state = [], action) => [...state, action],
       });
-      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = vi.fn().mockResolvedValue(resolvedObject);
     });
 
     it('dispatches CREATE_ACCOUNT_PENDING and CREATE_ACCOUNT_FULFILLED actions', async () => {

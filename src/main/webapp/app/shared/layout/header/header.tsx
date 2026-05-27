@@ -1,12 +1,12 @@
 import './header.scss';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
 import { Storage, Translate } from 'react-jhipster';
 
-import LoadingBar from 'react-redux-loading-bar';
+import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 
-import { useAppDispatch } from 'app/config/store';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { setLocale } from 'app/shared/reducers/locale';
 import { AccountMenu, AdminMenu, EntitiesMenu, LocaleMenu } from '../menus';
 
@@ -29,6 +29,17 @@ const Header = (props: IHeaderProps) => {
     dispatch(setLocale(langKey));
   };
 
+  const loadingBarRef = useRef<LoadingBarRef>(null);
+  const loadingCount = useAppSelector(state => state.loadingBar.count);
+
+  useEffect(() => {
+    if (loadingCount > 0) {
+      loadingBarRef.current?.continuousStart();
+    } else {
+      loadingBarRef.current?.complete();
+    }
+  }, [loadingCount]);
+
   const renderDevRibbon = () =>
     !props.isInProduction && (
       <div className="ribbon dev">
@@ -43,7 +54,7 @@ const Header = (props: IHeaderProps) => {
   return (
     <div id="app-header">
       {renderDevRibbon()}
-      <LoadingBar className="loading-bar" />
+      <LoadingBar ref={loadingBarRef} className="loading-bar" color="#009cd8" />
       <Navbar data-cy="navbar" data-bs-theme="dark" expand="md" fixed="top" className="jh-navbar" collapseOnSelect>
         <Navbar.Toggle aria-controls="header-tabs" aria-label="Menu" />
         <Brand />

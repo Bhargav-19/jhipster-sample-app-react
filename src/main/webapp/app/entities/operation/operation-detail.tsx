@@ -16,7 +16,7 @@ export const OperationDetail = () => {
   const { id } = useParams<'id'>();
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getEntity(id!));
   }, []);
 
   const operationEntity = useAppSelector(state => state.operation.entity);

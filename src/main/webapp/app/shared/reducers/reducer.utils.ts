@@ -107,7 +107,7 @@ export const createEntitySlice = <T, Reducers extends SliceCaseReducers<EntitySt
       ...reducers,
     },
     extraReducers(builder) {
-      extraReducers(builder);
+      extraReducers?.(builder);
       /*
        * Common rejection logic is handled here.
        * If you want to add your own rejection logic, pass `skipRejectionHandling: true`

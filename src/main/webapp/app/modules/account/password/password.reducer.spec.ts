@@ -1,8 +1,8 @@
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
 
 import { configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
-import sinon from 'sinon';
 
 import password, { reset, savePassword } from './password.reducer';
 
@@ -67,14 +67,14 @@ describe('Password reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
-    const getState = jest.fn();
-    const dispatch = jest.fn();
+    const getState = vi.fn();
+    const dispatch = vi.fn();
     const extra = {};
     beforeEach(() => {
       store = configureStore({
         reducer: (state = [], action) => [...state, action],
       });
-      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = vi.fn().mockResolvedValue(resolvedObject);
     });
 
     it('dispatches UPDATE_PASSWORD_PENDING and UPDATE_PASSWORD_FULFILLED actions', async () => {

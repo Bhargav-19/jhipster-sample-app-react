@@ -6,7 +6,7 @@ import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 const initialState = {
   loading: false,
-  errorMessage: null,
+  errorMessage: null as string | null,
   logs: {
     loggers: [] as any[],
   },
@@ -114,7 +114,7 @@ export const AdministrationSlice = createSlice({
       .addMatcher(
         isRejected(getSystemHealth, getSystemMetrics, getSystemThreadDump, getLoggers, getConfigurations, getEnv),
         (state, action) => {
-          state.errorMessage = action.error.message;
+          state.errorMessage = action.error.message!;
           state.loading = false;
         },
       );

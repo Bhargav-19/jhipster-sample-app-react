@@ -15,7 +15,7 @@ export const BankAccountDetail = () => {
   const { id } = useParams<'id'>();
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getEntity(id!));
   }, []);
 
   const bankAccountEntity = useAppSelector(state => state.bankAccount.entity);

@@ -15,7 +15,7 @@ export const LabelDetail = () => {
   const { id } = useParams<'id'>();
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getEntity(id!));
   }, []);
 
   const labelEntity = useAppSelector(state => state.label.entity);

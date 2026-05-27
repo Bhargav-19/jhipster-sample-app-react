@@ -18,7 +18,7 @@ export const UserManagementDetail = () => {
   const { login } = useParams<'login'>();
 
   useEffect(() => {
-    dispatch(getUser(login));
+    dispatch(getUser(login!));
   }, []);
 
   const user = useAppSelector(state => state.userManagement.user);

@@ -57,7 +57,7 @@ export const BankAccount = () => {
 
   const getSortIconByFieldName = (fieldName: string) => {
     const sortFieldName = sortState.sort;
-    const order = sortState.order;
+    const { order } = sortState;
     if (sortFieldName !== fieldName) {
       return faSort;
     }
@@ -142,7 +142,7 @@ export const BankAccount = () => {
                         </span>
                       </Button>
                       <Button
-                        onClick={() => (window.location.href = `/bank-account/${bankAccount.id}/delete`)}
+                        onClick={() => (globalThis.location.href = `/bank-account/${bankAccount.id}/delete`)}
                         variant="danger"
                         size="sm"
                         data-cy="entityDeleteButton"

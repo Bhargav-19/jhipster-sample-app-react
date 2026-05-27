@@ -1,12 +1,13 @@
+import { describe, expect, it, vi } from 'vitest';
+
 import axios from 'axios';
-import sinon from 'sinon';
 
 import setupAxiosInterceptors from './axios-interceptor';
 
 describe('Axios Interceptor', () => {
   describe('setupAxiosInterceptors', () => {
     const client = axios;
-    const onUnauthenticated = sinon.spy();
+    const onUnauthenticated = vi.fn();
     setupAxiosInterceptors(onUnauthenticated);
 
     it('onRequestSuccess is called on fulfilled request', () => {
@@ -17,7 +18,7 @@ describe('Axios Interceptor', () => {
     it('onResponseSuccess is called on fulfilled response', () => {
       expect((client.interceptors.response as any).handlers[0].fulfilled({ data: 'foo' })).toEqual({ data: 'foo' });
     });
-    it('onResponseError is called on rejected response', () => {
+    it('onResponseError is called on rejected response', async () => {
       const rejectError = {
         response: {
           statusText: 'NotFound',
@@ -25,8 +26,8 @@ describe('Axios Interceptor', () => {
           data: { message: 'Page not found' },
         },
       };
-      expect((client.interceptors.response as any).handlers[0].rejected(rejectError)).rejects.toEqual(rejectError);
-      expect(onUnauthenticated.calledOnce).toBe(true);
+      await expect((client.interceptors.response as any).handlers[0].rejected(rejectError)).rejects.toEqual(rejectError);
+      expect(onUnauthenticated).toHaveBeenCalledTimes(1);
     });
   });
 });

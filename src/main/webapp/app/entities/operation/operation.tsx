@@ -95,7 +95,7 @@ export const Operation = () => {
 
   const getSortIconByFieldName = (fieldName: string) => {
     const sortFieldName = paginationState.sort;
-    const order = paginationState.order;
+    const { order } = paginationState;
     if (sortFieldName !== fieldName) {
       return faSort;
     }
@@ -191,7 +191,7 @@ export const Operation = () => {
                           </span>
                         </Button>
                         <Button
-                          onClick={() => (window.location.href = `/operation/${operation.id}/delete`)}
+                          onClick={() => (globalThis.location.href = `/operation/${operation.id}/delete`)}
                           variant="danger"
                           size="sm"
                           data-cy="entityDeleteButton"

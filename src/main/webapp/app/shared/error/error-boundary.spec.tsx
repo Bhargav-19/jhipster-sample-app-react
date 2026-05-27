@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import React from 'react';
 
 import { render } from '@testing-library/react';
@@ -11,8 +12,8 @@ const ErrorComp = () => {
 describe('error component', () => {
   beforeEach(() => {
     // ignore console and jsdom errors
-    jest.spyOn((globalThis as any)._virtualConsole, 'emit').mockImplementation(() => false);
-    jest.spyOn((globalThis as any).console, 'error').mockImplementation(() => false);
+    vi.spyOn((globalThis as any)._virtualConsole, 'emit').mockImplementation(() => false);
+    vi.spyOn((globalThis as any).console, 'error').mockImplementation(() => false);
   });
 
   it('Should throw an error when component is not enclosed in Error Boundary', () => {
@@ -20,7 +21,7 @@ describe('error component', () => {
   });
 
   it('Should call Error Boundary componentDidCatch method', () => {
-    const spy = jest.spyOn(ErrorBoundary.prototype, 'componentDidCatch');
+    const spy = vi.spyOn(ErrorBoundary.prototype, 'componentDidCatch');
     render(
       <ErrorBoundary>
         <ErrorComp />

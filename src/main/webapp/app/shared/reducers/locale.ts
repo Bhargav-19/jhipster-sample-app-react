@@ -1,23 +1,22 @@
 import { TranslatorContext } from 'react-jhipster';
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 import dayjs from 'dayjs';
 
 const initialState = {
   currentLocale: '',
-  sourcePrefixes: [],
+  sourcePrefixes: [] as string[],
   lastChange: TranslatorContext.context.lastChange,
-  loadedKeys: [],
-  loadedLocales: [],
+  loadedKeys: [] as string[],
+  loadedLocales: [] as string[],
 };
 
 export type LocaleState = Readonly<typeof initialState>;
 
 const loadLocaleAndRegisterLocaleFile = async (locale: string, prefix: string) => {
   if (prefix || !Object.keys(TranslatorContext.context.translations).includes(locale)) {
-    const response = await axios.get(`${prefix}i18n/${locale}.json?_=${I18N_HASH}`, { baseURL: '' });
-    TranslatorContext.registerTranslations(locale, response.data);
+    const translations = await import(`../../../i18n/${locale}/${locale}.js`);
+    TranslatorContext.registerTranslations(locale, translations.default);
   }
 };
 
@@ -45,11 +44,9 @@ export const addTranslationSourcePrefix = createAsyncThunk(
   async (sourcePrefix: string, thunkAPI: any) => {
     const { currentLocale, loadedKeys, sourcePrefixes } = thunkAPI.getState().locale;
     const key = `${sourcePrefix}${currentLocale}`;
-    if (!sourcePrefixes.includes(sourcePrefix)) {
-      if (!loadedKeys.includes(key)) {
-        await loadLocaleAndRegisterLocaleFile(currentLocale, sourcePrefix);
-        thunkAPI.dispatch(loaded({ sourcePrefix, keys: [key] }));
-      }
+    if (!sourcePrefixes.includes(sourcePrefix) && !loadedKeys.includes(key)) {
+      await loadLocaleAndRegisterLocaleFile(currentLocale, sourcePrefix);
+      thunkAPI.dispatch(loaded({ sourcePrefix, keys: [key] }));
     }
     return key;
   },

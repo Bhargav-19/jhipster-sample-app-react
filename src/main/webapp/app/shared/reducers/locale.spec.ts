@@ -1,12 +1,12 @@
+import { describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
-
-import axios from 'axios';
-import sinon from 'sinon';
 
 import locale, { addTranslationSourcePrefix, loaded, setLocale, updateLocale } from 'app/shared/reducers/locale';
 
+vi.mock('../../../i18n/en/en.js', () => ({ default: { key: 'value' } }));
+
 const defaultLocale = 'en';
-const dispatch = jest.fn();
+const dispatch = vi.fn();
 const extra = {};
 
 describe('Locale reducer tests', () => {
@@ -45,15 +45,11 @@ describe('Locale reducer tests', () => {
 
   describe('setLocale reducer', () => {
     describe('with default language loaded', () => {
-      beforeEach(() => {
-        axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
-      });
-
       it('dispatches updateLocale action for default locale', async () => {
         TranslatorContext.setDefaultLocale(defaultLocale);
         expect(Object.keys(TranslatorContext.context.translations)).not.toContainEqual(defaultLocale);
 
-        const getState = jest.fn(() => ({ locale: { sourcePrefixes: '', loadedLocales: [defaultLocale], loadedKeys: [] } }));
+        const getState = vi.fn(() => ({ locale: { sourcePrefixes: '', loadedLocales: [defaultLocale], loadedKeys: [] } }));
 
         const result = await setLocale(defaultLocale)(dispatch, getState, extra);
 
@@ -68,15 +64,11 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with no language loaded', () => {
-      beforeEach(() => {
-        axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
-      });
-
       it('dispatches loaded and updateLocale action for default locale', async () => {
         TranslatorContext.setDefaultLocale(defaultLocale);
         expect(Object.keys(TranslatorContext.context.translations)).not.toContainEqual(defaultLocale);
 
-        const getState = jest.fn(() => ({ locale: { sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }));
+        const getState = vi.fn(() => ({ locale: { sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }));
 
         const result = await setLocale(defaultLocale)(dispatch, getState, extra);
 
@@ -95,12 +87,8 @@ describe('Locale reducer tests', () => {
     const sourcePrefix = 'foo/';
 
     describe('with no prefixes and keys loaded', () => {
-      beforeEach(() => {
-        axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
-      });
-
       it('dispatches loaded action with keys and sourcePrefix', async () => {
-        const getState = jest.fn(() => ({
+        const getState = vi.fn(() => ({
           locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] },
         }));
 
@@ -117,12 +105,8 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with prefix already added', () => {
-      beforeEach(() => {
-        axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
-      });
-
       it("doesn't dispatch loaded action", async () => {
-        const getState = jest.fn(() => ({
+        const getState = vi.fn(() => ({
           locale: { currentLocale: defaultLocale, sourcePrefixes: [sourcePrefix], loadedLocales: [], loadedKeys: [] },
         }));
 
@@ -139,12 +123,8 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with key already loaded', () => {
-      beforeEach(() => {
-        axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
-      });
-
       it("doesn't dispatch loaded action", async () => {
-        const getState = jest.fn(() => ({
+        const getState = vi.fn(() => ({
           locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [`${sourcePrefix}${defaultLocale}`] },
         }));
 

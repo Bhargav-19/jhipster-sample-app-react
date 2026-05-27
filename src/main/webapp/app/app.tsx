@@ -18,7 +18,7 @@ import Header from 'app/shared/layout/header/header';
 import { getProfile } from 'app/shared/reducers/application-profile';
 import { getSession } from 'app/shared/reducers/authentication';
 
-const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
+const baseHref = document.querySelector('base')!.getAttribute('href')!.replace(/\/$/, '');
 
 export const App = () => {
   const dispatch = useAppDispatch();

@@ -17,7 +17,7 @@ export const LabelDeleteDialog = () => {
   const [loadModal, setLoadModal] = useState(false);
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getEntity(id!));
     setLoadModal(true);
   }, []);
 

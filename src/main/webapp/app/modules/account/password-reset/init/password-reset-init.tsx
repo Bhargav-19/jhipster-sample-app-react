@@ -17,7 +17,7 @@ export const PasswordResetInit = () => {
     [],
   );
 
-  const handleValidSubmit = ({ email }) => {
+  const handleValidSubmit = ({ email }: Record<string, any>) => {
     dispatch(handlePasswordResetInit(email));
   };
 

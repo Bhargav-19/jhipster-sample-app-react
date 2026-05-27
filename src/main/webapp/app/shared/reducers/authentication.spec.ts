@@ -1,9 +1,10 @@
+import { describe, expect, it, vi } from 'vitest';
 import { Storage } from 'react-jhipster';
 
 import { configureStore, createReducer } from '@reduxjs/toolkit';
 import axios from 'axios';
-import sinon from 'sinon';
 
+import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
 import authentication, {
   authError,
   authenticate,
@@ -152,14 +153,14 @@ describe('Authentication reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
-    const getState = jest.fn();
-    const dispatch = jest.fn();
+    const getState = vi.fn();
+    const dispatch = vi.fn();
     const extra = {};
     beforeEach(() => {
       store = configureStore({
         reducer: (state = [], action) => [...state, action],
       });
-      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.get = vi.fn().mockResolvedValue(resolvedObject);
     });
 
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
@@ -186,7 +187,7 @@ describe('Authentication reducer tests', () => {
 
     it('dispatches LOGIN, GET_SESSION and SET_LOCALE success and request actions', async () => {
       const loginResponse = { headers: { authorization: 'auth' } };
-      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      axios.post = vi.fn().mockResolvedValue(loginResponse);
 
       const result = await authenticate('test', 'test')(dispatch, getState, extra);
 
@@ -210,9 +211,9 @@ describe('Authentication reducer tests', () => {
       });
     });
     it('clears the session token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
+      const AUTH_TOKEN_KEY = AUTHENTICATION_TOKEN_KEY;
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
-      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      axios.post = vi.fn().mockResolvedValue(loginResponse);
 
       await store.dispatch(login('test', 'test'));
       expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe('TestToken');
@@ -222,9 +223,9 @@ describe('Authentication reducer tests', () => {
       expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
     });
     it('clears the local storage token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
+      const AUTH_TOKEN_KEY = AUTHENTICATION_TOKEN_KEY;
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
-      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      axios.post = vi.fn().mockResolvedValue(loginResponse);
 
       await store.dispatch(login('user', 'user', true));
       expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);

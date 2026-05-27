@@ -57,7 +57,7 @@ export const Label = () => {
 
   const getSortIconByFieldName = (fieldName: string) => {
     const sortFieldName = sortState.sort;
-    const order = sortState.order;
+    const { order } = sortState;
     if (sortFieldName !== fieldName) {
       return faSort;
     }
@@ -134,7 +134,7 @@ export const Label = () => {
                         </span>
                       </Button>
                       <Button
-                        onClick={() => (window.location.href = `/label/${label.id}/delete`)}
+                        onClick={() => (globalThis.location.href = `/label/${label.id}/delete`)}
                         variant="danger"
                         size="sm"
                         data-cy="entityDeleteButton"

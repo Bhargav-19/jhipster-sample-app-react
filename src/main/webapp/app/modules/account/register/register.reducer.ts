@@ -7,8 +7,8 @@ const initialState = {
   loading: false,
   registrationSuccess: false,
   registrationFailure: false,
-  errorMessage: null,
-  successMessage: null,
+  errorMessage: null as string | null,
+  successMessage: null as string | null,
 };
 
 export type RegisterState = Readonly<typeof initialState>;
@@ -37,7 +37,7 @@ export const RegisterSlice = createSlice({
       .addCase(handleRegister.rejected, (state, action) => ({
         ...initialState,
         registrationFailure: true,
-        errorMessage: action.error.message,
+        errorMessage: action.error.message!,
       }))
       .addCase(handleRegister.fulfilled, () => ({
         ...initialState,

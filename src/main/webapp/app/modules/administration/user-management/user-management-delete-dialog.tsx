@@ -17,7 +17,7 @@ export const UserManagementDeleteDialog = () => {
   const { login } = useParams<'login'>();
 
   useEffect(() => {
-    dispatch(getUser(login));
+    dispatch(getUser(login!));
   }, []);
 
   const handleClose = () => {

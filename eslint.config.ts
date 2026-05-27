@@ -1,8 +1,8 @@
 import eslint from '@eslint/js';
+import react from '@eslint-react/eslint-plugin';
 import { defineConfig } from 'eslint/config';
 import cypress from 'eslint-plugin-cypress';
 import prettier from 'eslint-plugin-prettier/recommended';
-import react from 'eslint-plugin-react/configs/recommended.js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 // jhipster-needle-eslint-add-import - JHipster will add additional import here
@@ -26,21 +26,21 @@ export default defineConfig(
   },
   {
     files: ['src/main/webapp/**/*.{ts,tsx}'],
-    extends: [...tseslint.configs.recommendedTypeChecked, react],
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
+    extends: [...tseslint.configs.recommendedTypeChecked, react.configs['recommended-type-checked']],
     languageOptions: {
       globals: {
         ...globals.browser,
       },
       parserOptions: {
-        project: ['./tsconfig.json', './tsconfig.test.json'],
+        project: ['./tsconfig.json', './tsconfig.vitest.json'],
       },
     },
     rules: {
+      '@eslint-react/exhaustive-deps': 'off',
+      '@eslint-react/use-state': 'off',
+      '@eslint-react/rules-of-hooks': 'off',
+      '@eslint-react/set-state-in-effect': 'off',
+      '@eslint-react/no-array-index-key': 'off',
       '@typescript-eslint/member-ordering': [
         'error',
         {
@@ -62,6 +62,7 @@ export default defineConfig(
       '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/unbound-method': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
       '@typescript-eslint/array-type': 'error',
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-shadow': 'error',
@@ -82,8 +83,6 @@ export default defineConfig(
       'default-case': 'error',
       complexity: ['warn', 40],
       'no-invalid-this': 'off',
-      'react/prop-types': 'off',
-      'react/display-name': 'off',
     },
   },
   {

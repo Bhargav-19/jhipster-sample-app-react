@@ -35,7 +35,7 @@ export const ActivatePage = () => {
   useEffect(() => {
     const key = searchParams.get('key');
 
-    dispatch(activateAction(key));
+    dispatch(activateAction(key!));
     return () => {
       dispatch(reset());
     };

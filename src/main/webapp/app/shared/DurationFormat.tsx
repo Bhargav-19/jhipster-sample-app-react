@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { TranslatorContext } from 'react-jhipster';
 
 import dayjs from 'dayjs';
@@ -15,7 +15,7 @@ export const DurationFormat = ({ value, blankOnInvalid, locale }: IDurationForma
   }
 
   if (!locale) {
-    locale = TranslatorContext.context.locale;
+    locale = TranslatorContext.context.locale ?? undefined;
   }
 
   return (

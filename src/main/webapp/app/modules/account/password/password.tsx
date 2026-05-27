@@ -22,7 +22,7 @@ export const PasswordPage = () => {
     };
   }, []);
 
-  const handleValidSubmit = ({ currentPassword, newPassword }) => {
+  const handleValidSubmit = ({ currentPassword, newPassword }: Record<string, any>) => {
     dispatch(savePassword({ currentPassword, newPassword }));
   };
 
