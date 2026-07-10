@@ -7,7 +7,7 @@ const entitiesReducers = {
   bankAccount,
   label,
   operation,
-  /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
+  // jhipster-needle-add-reducer-combine - JHipster will add reducer here
 };
 
 export default entitiesReducers;

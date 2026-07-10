@@ -93,7 +93,7 @@ export const clearAuthentication = messageKey => dispatch => {
 
 export const AuthenticationSlice = createSlice({
   name: 'authentication',
-  initialState: initialState as AuthenticationState,
+  initialState,
   reducers: {
     logoutSession() {
       return {

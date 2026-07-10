@@ -23,7 +23,7 @@ export const handleRegister = createAsyncThunk(
 
 export const RegisterSlice = createSlice({
   name: 'register',
-  initialState: initialState as RegisterState,
+  initialState,
   reducers: {
     reset() {
       return initialState;

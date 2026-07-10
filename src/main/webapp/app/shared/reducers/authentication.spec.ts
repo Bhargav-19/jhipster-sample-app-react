@@ -35,7 +35,7 @@ describe('Authentication reducer tests', () => {
         showModalLogin: false,
         redirectMessage: null,
       });
-      expect(isAccountEmpty(toTest));
+      expect(isAccountEmpty(toTest)).toBe(true);
     });
   });
 
@@ -92,7 +92,7 @@ describe('Authentication reducer tests', () => {
         showModalLogin: true,
         loginError: true,
       });
-      expect(isAccountEmpty(toTest));
+      expect(isAccountEmpty(toTest)).toBe(true);
     });
 
     it('should detect a failure', () => {
@@ -105,7 +105,7 @@ describe('Authentication reducer tests', () => {
         showModalLogin: true,
         errorMessage: error.message,
       });
-      expect(isAccountEmpty(toTest));
+      expect(isAccountEmpty(toTest)).toBe(true);
     });
   });
 
@@ -121,7 +121,7 @@ describe('Authentication reducer tests', () => {
         errorMessage: null,
         redirectMessage: null,
       });
-      expect(isAccountEmpty(toTest));
+      expect(isAccountEmpty(toTest)).toBe(true);
     });
 
     it('should properly define an error message and change the current state to display the login modal', () => {
@@ -136,7 +136,7 @@ describe('Authentication reducer tests', () => {
         errorMessage: null,
         redirectMessage: message,
       });
-      expect(isAccountEmpty(toTest));
+      expect(isAccountEmpty(toTest)).toBe(true);
     });
 
     it('should clear authentication', () => {

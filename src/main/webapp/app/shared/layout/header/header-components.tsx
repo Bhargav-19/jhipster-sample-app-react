@@ -13,7 +13,7 @@ export const BrandIcon = props => (
 );
 
 export const Brand = () => (
-  <NavbarBrand as={Link as any} to="/" className="brand-logo">
+  <NavbarBrand as={Link} to="/" className="brand-logo">
     <BrandIcon />
     <span className="brand-title">
       <Translate contentKey="global.title">JhipsterSampleApplicationReact</Translate>
@@ -24,7 +24,7 @@ export const Brand = () => (
 
 export const Home = () => (
   <NavItem>
-    <NavLink as={Link as any} to="/" className="d-flex align-items-center">
+    <NavLink as={Link} to="/" className="d-flex align-items-center">
       <FontAwesomeIcon icon={faHome} />
       <span>
         <Translate contentKey="global.menu.home">Home</Translate>

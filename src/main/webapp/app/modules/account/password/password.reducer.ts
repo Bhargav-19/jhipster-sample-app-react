@@ -30,7 +30,7 @@ export const savePassword = createAsyncThunk(
 
 export const PasswordSlice = createSlice({
   name: 'password',
-  initialState: initialState as PasswordState,
+  initialState,
   reducers: {
     reset() {
       return initialState;

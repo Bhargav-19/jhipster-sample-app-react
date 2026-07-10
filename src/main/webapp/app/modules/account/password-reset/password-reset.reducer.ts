@@ -30,7 +30,7 @@ export const handlePasswordResetFinish = createAsyncThunk(
 
 export const PasswordResetSlice = createSlice({
   name: 'passwordReset',
-  initialState: initialState as PasswordResetState,
+  initialState,
   reducers: {
     reset() {
       return initialState;

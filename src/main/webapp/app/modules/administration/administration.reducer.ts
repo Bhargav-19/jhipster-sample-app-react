@@ -71,7 +71,7 @@ export const getEnv = createAsyncThunk('administration/fetch_env', async () => a
 
 export const AdministrationSlice = createSlice({
   name: 'administration',
-  initialState: initialState as AdministrationState,
+  initialState,
   reducers: {},
   extraReducers(builder) {
     builder
