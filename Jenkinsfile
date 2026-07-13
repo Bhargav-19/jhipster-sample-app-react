@@ -4,9 +4,12 @@ pipeline {
     agent any
 
     environment {
-        // Jenkins on Windows often runs as SYSTEM; redirect npm cache to the workspace
+        // Jenkins on Windows often runs as SYSTEM; redirect caches to the workspace
         HOME = "${WORKSPACE}"
         USERPROFILE = "${WORKSPACE}"
+        TEMP = "${WORKSPACE}\\.tmp"
+        TMP = "${WORKSPACE}\\.tmp"
+        MAVEN_USER_HOME = "${WORKSPACE}\\.m2"
         NPM_CONFIG_CACHE = "${WORKSPACE}\\.npm"
         // Puppeteer (from lighthouse/cypress-audit) cannot download Chromium on restricted networks
         PUPPETEER_SKIP_DOWNLOAD = 'true'
@@ -16,6 +19,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                bat 'if not exist ".tmp" mkdir ".tmp"'
             }
         }
 
