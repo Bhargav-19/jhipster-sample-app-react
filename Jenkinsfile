@@ -13,6 +13,8 @@ pipeline {
         NPM_CONFIG_CACHE = "${WORKSPACE}\\.npm"
         // Puppeteer (from lighthouse/cypress-audit) cannot download Chromium on restricted networks
         PUPPETEER_SKIP_DOWNLOAD = 'true'
+        // Must match the SonarQube server name in Jenkins → Manage Jenkins → System → SonarQube servers
+        SONARQUBE_SERVER = 'SonarQube'
     }
 
     stages {
@@ -62,6 +64,22 @@ pipeline {
         stage('Build JAR') {
             steps {
                 bat 'npmw.cmd run java:jar:prod'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                    bat 'mvnw.cmd -ntp initialize sonar:sonar'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
     }
