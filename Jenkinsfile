@@ -13,6 +13,8 @@ pipeline {
         NPM_CONFIG_CACHE = "${WORKSPACE}\\.npm"
         // Puppeteer (from lighthouse/cypress-audit) cannot download Chromium on restricted networks
         PUPPETEER_SKIP_DOWNLOAD = 'true'
+        // Must match the SonarQube server name in Jenkins → Manage Jenkins → System → SonarQube servers
+        SONARQUBE_SERVER = 'SonarQube'
     }
 
     stages {
@@ -49,19 +51,39 @@ pipeline {
 
         stage('Frontend Tests') {
             steps {
-                bat 'npmw.cmd run ci:frontend:test'
+                // Use explicit prod script; npm $npm_package_config_* vars are not expanded on Windows cmd
+                bat 'npmw.cmd run webapp:build:prod && npmw.cmd run test'
             }
         }
 
         stage('Backend Tests') {
             steps {
-                bat 'npmw.cmd run ci:backend:test'
+                bat 'mvnw.cmd --version'
+                bat 'mvnw.cmd -ntp javadoc:javadoc --batch-mode'
+                bat 'mvnw.cmd -ntp checkstyle:check --batch-mode'
+                bat 'mvnw.cmd -ntp -Dskip.installnodenpm -Dskip.npm verify --batch-mode -Dlogging.level.ROOT=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.io.github.jhipster.sample=OFF -Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF -Pprod'
             }
         }
 
         stage('Build JAR') {
             steps {
-                bat 'npmw.cmd run java:jar:prod'
+                bat 'mvnw.cmd -ntp verify -DskipTests --batch-mode -Pprod'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                    bat 'mvnw.cmd -ntp initialize sonar:sonar'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
     }
